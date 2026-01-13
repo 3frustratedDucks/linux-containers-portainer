@@ -219,12 +219,12 @@ services:
       - AGENT_CLUSTER_ADDR=${SERVER_ADDRESS}
     command:
       - --server-addr=${SERVER_ADDRESS}:8000
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9001/ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+    # healthcheck:
+    #   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9001/ping"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
 
 networks:
   default:
