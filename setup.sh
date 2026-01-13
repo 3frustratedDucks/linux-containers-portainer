@@ -155,6 +155,24 @@ mkdir -p "$PROJECT_ROOT/scripts"
 # Create docker-compose.yml based on installation type
 echo -e "${YELLOW}Creating docker-compose.yml...${NC}"
 
+# Check if docker-compose.yml already exists
+if [ -f "$PROJECT_ROOT/docker-compose.yml" ]; then
+    echo -e "${YELLOW}Warning: docker-compose.yml already exists!${NC}"
+    echo -e "${YELLOW}Running setup.sh will OVERWRITE your existing configuration.${NC}"
+    echo -e "${YELLOW}Any customizations or comments will be lost.${NC}"
+    echo ""
+    read -p "Do you want to continue and overwrite it? (y/N): " OVERWRITE_CONFIRM
+    if [[ ! "$OVERWRITE_CONFIRM" =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}Setup cancelled. Your existing docker-compose.yml is unchanged.${NC}"
+        exit 0
+    fi
+    
+    # Create backup before overwriting
+    BACKUP_FILE="$PROJECT_ROOT/docker-compose.yml.backup.$(date +%Y%m%d-%H%M%S)"
+    cp "$PROJECT_ROOT/docker-compose.yml" "$BACKUP_FILE"
+    echo -e "${GREEN}Backup created: $BACKUP_FILE${NC}"
+fi
+
 if [[ "$INSTALL_MODE" == "server" ]]; then
     # Portainer Server configuration
     cat > "$PROJECT_ROOT/docker-compose.yml" << 'EOF'
